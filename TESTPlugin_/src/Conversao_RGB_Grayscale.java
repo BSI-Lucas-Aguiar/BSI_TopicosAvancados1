@@ -59,12 +59,8 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 					vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 						
 					mediaRGB = (vetorRGB[0]+vetorRGB[1]+vetorRGB[2])/3;
-						
-					vetorRGB[0] = mediaRGB;
-					vetorRGB[1] = mediaRGB;
-					vetorRGB[2] = mediaRGB;
 								
-					processadorNova.putPixel(x, y, vetorRGB);
+					processadorNova.putPixel(x, y, mediaRGB);
 				}
 			}
 			imagemNova.updateAndDraw();
@@ -77,8 +73,12 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 					vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 						
 					mediaRGB = (vetorRGB[0]+vetorRGB[1]+vetorRGB[2])/3;
+					
+					vetorRGB[0] = mediaRGB;
+					vetorRGB[1] = mediaRGB;
+					vetorRGB[2] = mediaRGB;
 								
-					processadorRGB.putPixel(x, y, mediaRGB);
+					processadorRGB.putPixel(x, y, vetorRGB);
 				}
 			}
 			imagemRGB.updateAndDraw();
@@ -105,12 +105,8 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 					vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 							
 					pesoRGB = (int) (pesoR*vetorRGB[0] + pesoG*vetorRGB[1] + pesoB*vetorRGB[2]);
-						
-					vetorRGB[0] = pesoRGB;
-					vetorRGB[1] = pesoRGB;
-					vetorRGB[2] = pesoRGB;
 								
-					processadorNova.putPixel(x, y, vetorRGB);
+					processadorNova.putPixel(x, y, pesoRGB);
 				}
 			}
 			imagemNova.updateAndDraw();
@@ -123,8 +119,12 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 					vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 						
 					pesoRGB = (int) (pesoR*vetorRGB[0] + pesoG*vetorRGB[1] + pesoB*vetorRGB[2]);
+					
+					vetorRGB[0] = pesoRGB;
+					vetorRGB[1] = pesoRGB;
+					vetorRGB[2] = pesoRGB;
 
-					processadorRGB.putPixel(x, y, pesoRGB);
+					processadorRGB.putPixel(x, y, vetorRGB);
 				}
 			}
 			imagemRGB.updateAndDraw();
@@ -151,12 +151,8 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 						vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 								
 						pesoRGB = (int) (pesoR*vetorRGB[0] + pesoG*vetorRGB[1] + pesoB*vetorRGB[2]);
-							
-						vetorRGB[0] = pesoRGB;
-						vetorRGB[1] = pesoRGB;
-						vetorRGB[2] = pesoRGB;
 									
-						processadorNova.putPixel(x, y, vetorRGB);
+						processadorNova.putPixel(x, y, pesoRGB);
 					}
 				}
 				imagemNova.updateAndDraw();
@@ -169,21 +165,15 @@ public class Conversao_RGB_Grayscale implements PlugIn {
 						vetorRGB[2] = processadorRGB.getPixel(x, y, null) [2];
 							
 						pesoRGB = (int) (pesoR*vetorRGB[0] + pesoG*vetorRGB[1] + pesoB*vetorRGB[2]);
+						
+						vetorRGB[0] = pesoRGB;
+						vetorRGB[1] = pesoRGB;
+						vetorRGB[2] = pesoRGB;
 									
-						processadorRGB.putPixel(x, y, pesoRGB);
+						processadorRGB.putPixel(x, y, vetorRGB);
 					}
 				}
 				imagemRGB.updateAndDraw();
 			}
 		}
-		
-	/*
-	@Override
-	public boolean dialogItemChanged(GenericDialog interfaceGrafica, AWTEvent e) {
-		if (interfaceGrafica.wasCanceled()) return false;
-		IJ.log("Resposta do botão de rádio: " + interfaceGrafica.getNextRadioButton());
-		IJ.log("Resposta do checkbox: " + interfaceGrafica.getNextBoolean());
-        IJ.log("\n");
-        return true;
-    }*/
 }
