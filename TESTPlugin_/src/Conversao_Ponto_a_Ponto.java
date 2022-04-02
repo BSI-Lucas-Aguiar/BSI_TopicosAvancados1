@@ -32,22 +32,35 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
         interfaceGrafica.addDialogListener(this);
         interfaceGrafica.addSlider("Brilho", -255, 255, 0, 1);
         interfaceGrafica.addSlider("Contraste", -255, 255, 0, 1);
-        interfaceGrafica.addSlider("Solarização", 0, 255, 128, 1);
-        interfaceGrafica.addSlider("Dessaturação", 0, 255, 128, 1);
+        interfaceGrafica.addSlider("Solarização", -255, 255, 0, 1);
+        interfaceGrafica.addSlider("Dessaturação", 0, 100, 0, 1);
         interfaceGrafica.showDialog();
         
 
         if (interfaceGrafica.wasCanceled()) {
+        	restauraImagem();
+        	imagemRGB.updateAndDraw();
             IJ.showMessage("Conversão cancelada!");
         } else {
             if (interfaceGrafica.wasOKed()) {
-
+            	imagemRGB.updateAndDraw();
+            	IJ.showMessage("Modificações realizadas!");
             }
         }
         imagemRGB.updateAndDraw();
 
-        interfaceGrafica.getNextNumber();
 
+    }
+    
+    public void restauraImagem() {
+    	for(int x = 0; x < processadorRGB.getWidth(); x++) {
+    		for(int y = 0; y < processadorRGB.getHeight(); y++) {
+    			vetorRGB[0] = processadorOriginal.getPixel(x, y, null) [0];
+    			vetorRGB[1] = processadorOriginal.getPixel(x, y, null) [1];
+    			vetorRGB[2] = processadorOriginal.getPixel(x, y, null) [2];
+    			processadorRGB.putPixel(x, y, vetorRGB);
+    		}
+    	}
     }
 
     @Override
@@ -65,67 +78,97 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
         int solarizacao = (int) interfaceGrafica.getNextNumber();
         int dessaturacao = (int) interfaceGrafica.getNextNumber();
 
-        atualizaBrilho(brilho);
-        atualizaContraste(contraste);
+        atualizaImagem(brilho, contraste, solarizacao, dessaturacao);
 
         return true;
     }
     
-    public void atualizaBrilho(int brilho) {
+    public void atualizaImagem(int brilho, int contraste, int solarizacao, int dessaturacao) {
+    	int fatorContraste = ((259*(contraste + 255)) / (255*(259 - contraste)));
     	
-        for(int x = 0; x < processadorRGB.getWidth(); x++) {
+    	double dessaturacaoReal = dessaturacao/10;
+    	
+		for(int x = 0; x < processadorRGB.getWidth(); x++) {
     		for(int y = 0; y < processadorRGB.getHeight(); y++) {
     			//Brilho R
     			vetorRGB[0] = brilho + processadorOriginal.getPixel(x, y, null) [0];
-    			if((brilho + processadorOriginal.getPixel(x, y, null) [0]) > 255) {
+    			if(vetorRGB[0] > 255) {
     				vetorRGB[0] = 255;
     			}else {
-    				if((brilho + processadorOriginal.getPixel(x, y, null) [0]) < 0) {
+    				if(vetorRGB[0] < 0) {
     					vetorRGB[0] = 0;
     				}
     			}
     			
     			//Brilho G
     			vetorRGB[1] = brilho + processadorOriginal.getPixel(x, y, null) [1];
-    			if((brilho + processadorOriginal.getPixel(x, y, null) [1]) > 255) {
+    			if(vetorRGB[1] > 255) {
     				vetorRGB[1] = 255;
     			}else {
-    				if((brilho + processadorOriginal.getPixel(x, y, null) [1]) < 0) {
+    				if(vetorRGB[1] < 0) {
     					vetorRGB[1] = 0;
     				}
     			}
     			
     			//Brilho B
     			vetorRGB[2] = brilho + processadorOriginal.getPixel(x, y, null) [2];
-    			if((brilho + processadorOriginal.getPixel(x, y, null) [2]) > 255) {
+    			if(vetorRGB[2] > 255) {
     				vetorRGB[2] = 255;
     			}else {
-    				if((brilho + processadorOriginal.getPixel(x, y, null) [2]) < 0) {
+    				if(vetorRGB[2] < 0) {
     					vetorRGB[2] = 0;
     				}
     			}
     			
-    			processadorRGB.putPixel(x, y, vetorRGB);
-    		}
-    	}
-
-        imagemRGB.updateAndDraw();
-    }
-    
-    public void atualizaContraste(int contraste) {
-    	int nivelContraste = (259*(contraste + 255)) / (255*(259 - contraste));
-    	
-    	
-    	for(int x = 0; x < processadorRGB.getWidth(); x++) {
-    		for(int y = 0; y < processadorRGB.getHeight(); y++) {
-    			vetorRGB[0] = nivelContraste*(processadorOriginal.getPixel(x, y, null) [0] - 128) + 128;
-    			vetorRGB[1] = nivelContraste*(processadorOriginal.getPixel(x, y, null) [1] - 128) + 128;
-    			vetorRGB[2] = nivelContraste*(processadorOriginal.getPixel(x, y, null) [2] - 128) + 128;
+    			//Contraste R
+    			vetorRGB[0] = fatorContraste*(vetorRGB[0] - 128) + 128;
+    			if(vetorRGB[0] > 255) {
+    				vetorRGB[0] = 255;
+    			}else {
+    				if(vetorRGB[0] < 0) {
+    					vetorRGB[0] = 0;
+    				}
+    			}
+    			
+    			//Contraste G
+    			vetorRGB[1] = fatorContraste*(vetorRGB[1] - 128) + 128;
+    			if(vetorRGB[1] > 255) {
+    				vetorRGB[1] = 255;
+    			}else {
+    				if(vetorRGB[1] < 0) {
+    					vetorRGB[1] = 0;
+    				}
+    			}
+    			
+    			//Contraste B
+    			vetorRGB[2] = fatorContraste*(vetorRGB[2] - 128) + 128;
+    			if(vetorRGB[2] > 255) {
+    				vetorRGB[2] = 255;
+    			}else {
+    				if(vetorRGB[2] < 0) {
+    					vetorRGB[2] = 0;
+    				}
+    			}
+    			
+    			//Solarização
+    			if(vetorRGB[0] < solarizacao || vetorRGB[0] > solarizacao) {
+    				vetorRGB[0] = 255 - vetorRGB[0];
+    			}
+    			
+    			if(vetorRGB[1] < solarizacao || vetorRGB[1] > solarizacao) {
+    				vetorRGB[1] = 255 - vetorRGB[1];
+    			}
+    			
+    			if(vetorRGB[2] < solarizacao || vetorRGB[2] > solarizacao) {
+    				vetorRGB[2] = 255 - vetorRGB[2];
+    			}
+    			
+    			
     			
     			processadorRGB.putPixel(x, y, vetorRGB);
     		}
+		imagemRGB.updateAndDraw();
     	}
-
-        imagemRGB.updateAndDraw();
     }
+    	
 }
