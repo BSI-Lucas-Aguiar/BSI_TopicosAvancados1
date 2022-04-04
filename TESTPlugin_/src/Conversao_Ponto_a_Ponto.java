@@ -83,7 +83,12 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     }
     
     public void atualizaImagem(int brilho, int contraste, int solarizacao, int dessaturacao) {
-    	double fatorContraste = ((259*(contraste + 255)) / (255*(259 - contraste)));
+    	
+    	double fatorContraste = (259 * (contraste + 255))/(255*(259-contraste));
+//    	if(fatorContraste < 0) {
+//    		fatorContraste = (259 * (contraste + 255))/(255*(259-contraste));
+//    	}
+    	
     	
 		for(int x = 0; x < processadorRGB.getWidth(); x++) {
     		for(int y = 0; y < processadorRGB.getHeight(); y++) {
@@ -119,9 +124,8 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     			}
     			
     			//******************************************
-    			
 				//Contraste R
-				vetorRGB[0] = (int) fatorContraste*(vetorRGB[0] - 128) + 128;
+				vetorRGB[0] = (int) (fatorContraste*(vetorRGB[0] - 128) + 128);
     			if(vetorRGB[0] > 255) {
     				vetorRGB[0] = 255;
     			}else {
@@ -131,7 +135,7 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     			}
     			
     			//Contraste G
-    			vetorRGB[1] = (int) fatorContraste*(vetorRGB[1] - 128) + 128;
+    			vetorRGB[1] = (int) (fatorContraste*(vetorRGB[1] - 128) + 128);
     			if(vetorRGB[1] > 255) {
     				vetorRGB[1] = 255;
     			}else {
@@ -141,7 +145,7 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     			}
     			
     			//Contraste B
-    			vetorRGB[2] = (int) fatorContraste*(vetorRGB[2] - 128) + 128;
+    			vetorRGB[2] = (int) (fatorContraste*(vetorRGB[2] - 128) + 128);
     			if(vetorRGB[2] > 255) {
     				vetorRGB[2] = 255;
     			}else {
