@@ -1,3 +1,4 @@
+package Exemplos;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.PlugIn;

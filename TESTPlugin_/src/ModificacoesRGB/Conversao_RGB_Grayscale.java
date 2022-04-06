@@ -1,3 +1,4 @@
+package ModificacoesRGB;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 import ij.gui.GenericDialog;

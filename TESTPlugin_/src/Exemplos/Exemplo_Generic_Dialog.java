@@ -1,3 +1,4 @@
+package Exemplos;
 import ij.plugin.PlugIn;
 import ij.gui.DialogListener;
 import ij.gui.GenericDialog;

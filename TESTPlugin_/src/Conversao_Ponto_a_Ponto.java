@@ -31,7 +31,7 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
         interfaceGrafica.addDialogListener(this);
         interfaceGrafica.addSlider("Brilho", -255, 255, 0, 1);
         interfaceGrafica.addSlider("Contraste", -255, 255, 0, 1);
-        interfaceGrafica.addSlider("Solarização", 0, 255, 0, 1);
+        interfaceGrafica.addSlider("Solarização", 0, 255, 255, 1);
         interfaceGrafica.addSlider("Dessaturação", 0, 1, 1, 0.01);
         interfaceGrafica.showDialog();
         
@@ -75,16 +75,16 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
         int brilho = (int) interfaceGrafica.getNextNumber();
         int contraste = (int) interfaceGrafica.getNextNumber();
         int solarizacao = (int) interfaceGrafica.getNextNumber();
-        int dessaturacao = (int) interfaceGrafica.getNextNumber();
+        double dessaturacao = interfaceGrafica.getNextNumber();
 
         atualizaImagem(brilho, contraste, solarizacao, dessaturacao);
 
         return true;
     }
     
-    public void atualizaImagem(int brilho, int contraste, int solarizacao, int dessaturacao) {
+    public void atualizaImagem(int brilho, int contraste, int solarizacao, double dessaturacao) {
     	
-    	double fatorContraste = (259 * (contraste + 255))/(255*(259-contraste));
+    	double fatorContraste = (double) (259 * (contraste + 255) ) / (255 * (259-contraste) ) ;
 //    	if(fatorContraste < 0) {
 //    		fatorContraste = (259 * (contraste + 255))/(255*(259-contraste));
 //    	}
@@ -156,8 +156,8 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     			
     			//******************************************
     			//Solarização Acima da Limiar
-    			if(processadorRGB.getPixel(x, y, null) [0] > solarizacao) {
-    				vetorRGB[0] = vetorRGB[0] - solarizacao;
+    			if(vetorRGB[0] > solarizacao) {
+    				vetorRGB[0] = 255 - vetorRGB[0];
     				if(vetorRGB[0] > 255) {
     					vetorRGB[0] = 255;
     				}else {
@@ -167,8 +167,8 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     				}
     			}
     			
-    			if(processadorRGB.getPixel(x, y, null) [1] > solarizacao) {
-    				vetorRGB[1] = vetorRGB[1] - solarizacao;
+    			if(vetorRGB[1] > solarizacao) {
+    				vetorRGB[1] = 255 - vetorRGB[1];
     				if(vetorRGB[1] > 255) {
     					vetorRGB[1] = 255;
     				}else {
@@ -178,8 +178,8 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     				}
     			}
     			
-    			if(processadorRGB.getPixel(x, y, null) [2] > solarizacao) {
-    				vetorRGB[2] = vetorRGB[2] - solarizacao;
+    			if(vetorRGB[2] > solarizacao) {
+    				vetorRGB[2] = 255 - vetorRGB[2];
     				if(vetorRGB[2] > 255) {
     					vetorRGB[2] = 255;
     				}else {

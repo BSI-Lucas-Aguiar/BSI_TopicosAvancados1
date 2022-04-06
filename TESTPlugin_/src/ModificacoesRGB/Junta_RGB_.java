@@ -1,3 +1,4 @@
+package ModificacoesRGB;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
