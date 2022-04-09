@@ -17,8 +17,6 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 	private ImagePlus imagemCinza;
 	private ImageProcessor processadorCinza;
 	
-	//Vetores para as operações
-	private int vetorExpansao[] = new int[256];
 	//Possui 256 posições para fazer a fórmula da equalização
 	private int vetorEqualizacao[] = new int[256];
 	
@@ -110,9 +108,6 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 		//Vetor A (Fórmula) Pixel atual
 		int vetorA[] = {0};
 		int pixelExpandido = 0;
-		for (int x = 0; x < vetorExpansao.length; x++) {
-			vetorExpansao[x] = 0;
-		}
 
 		//Processamento de todos os pixels conforme a fórmula de expansão
 		for (int x = 0; x < processador.getWidth(); x++) {
@@ -120,7 +115,6 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 				vetorA = processadorCinza.getPixel(x, y, vetorA);
 				//A fórmula do Slide não funciona, a fórmula a seguir foi fruto de pesquisa
 				pixelExpandido = (valorMin + (vetorA[0] - valorLow) * (valorMax / (valorHigh - valorLow)));
-				vetorExpansao[pixelExpandido]++;
 				processadorDuplicado.putPixel(x, y, pixelExpandido);
 			}
 		}

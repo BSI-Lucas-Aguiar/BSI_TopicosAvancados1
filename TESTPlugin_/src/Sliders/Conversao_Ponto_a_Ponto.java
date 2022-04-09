@@ -1,3 +1,4 @@
+package Sliders;
 import java.awt.AWTEvent;
 
 import ij.IJ;
@@ -84,10 +85,8 @@ public class Conversao_Ponto_a_Ponto implements PlugIn, DialogListener {
     
     public void atualizaImagem(int brilho, int contraste, int solarizacao, double dessaturacao) {
     	
+    	//Passando a primeira parte da fórmula para double
     	double fatorContraste = (double) (259 * (contraste + 255) ) / (255 * (259-contraste) ) ;
-//    	if(fatorContraste < 0) {
-//    		fatorContraste = (259 * (contraste + 255))/(255*(259-contraste));
-//    	}
     	
     	
 		for(int x = 0; x < processadorRGB.getWidth(); x++) {
