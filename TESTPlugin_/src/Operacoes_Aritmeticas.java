@@ -6,7 +6,6 @@ import ij.gui.DialogListener;
 import ij.gui.GenericDialog;
 import ij.plugin.ImageCalculator;
 import ij.plugin.PlugIn;
-import ij.process.ImageProcessor;
 
 
 public class Operacoes_Aritmeticas implements PlugIn, DialogListener{
