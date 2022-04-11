@@ -10,9 +10,9 @@ import ij.process.ImageProcessor;
 public class Soma_Imagens implements PlugIn, DialogListener{
 	
 	ImagePlus imp3 = IJ.openImage("C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/imagem3.jpg");
-	ImageProcessor processador3 = IJ.getProcessor();
+	ImageProcessor processador3 = imp3.getProcessor();
 	ImagePlus imp4 = IJ.openImage("C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/imagem4.jpg");
-	ImageProcessor processador4 = IJ.getProcessor();
+	ImageProcessor processador4 = imp4.getProcessor();
 	
 	public void run(String arg) {
 		
@@ -41,26 +41,71 @@ public class Soma_Imagens implements PlugIn, DialogListener{
 	}
 	
 	private void somaImagens(String opcaoSelecionada) {
-		ImagePlus imagemSomada = IJ.createImage("Imagem Somada", "8-bit", imp3.getHeight(), imp3.getWidth(), 1);
-		ImageProcessor processadorSoma = IJ.getProcessor();
+		ImagePlus imagemSomada = IJ.createImage("Imagem Somada", "8-bit", imp3.getWidth(), imp3.getHeight(), 1);
+		ImageProcessor processadorSoma = imagemSomada.getProcessor();
 		if(opcaoSelecionada == "Truncamento") {
+			
 			for(int x = 0; x < processador3.getWidth(); x++) {
 				for(int y = 0; y < processador3.getHeight(); y++) {
-					processadorSoma.putPixel(x, y, processador3.getPixel(x, y)+processador4.getPixel(x, y));
+					processadorSoma.putPixel(x, y, processador3.getPixel(x, y) + processador4.getPixel(x, y));
 					if(processadorSoma.getPixel(x, y) > 255) {
 						processadorSoma.putPixel(x, y, 255);
-					}else if(processadorSoma.getPixel(x, y) < 255) {
+					}else if(processadorSoma.getPixel(x, y) < 0) {
 						processadorSoma.putPixel(x, y, 0);
 	    			}
 					
 	    		}
 	    	}
-			imagemSomada.updateAndDraw();
+			//imagemSomada.updateAndDraw();
 			imagemSomada.show();
 			
 		}else if(opcaoSelecionada == "Normalização") {
+			int vetorF[][] = new int[processador3.getWidth()][processador3.getHeight()];
+			int fMin = 255;
+			int fMax = 0;
+			int soma = 0;
+			for(int x = 0; x < processador3.getWidth(); x++) {
+				for(int y = 0; y < processador3.getHeight(); y++) {
+					soma = processador3.getPixel(x, y) + processador4.getPixel(x, y);
+					vetorF[x][y] = soma;
+					//Verificação do fMin e fMax dentre as duas imagens
+					if(processador3.getPixel(x, y) > fMax) {
+						fMax = processador3.getPixel(x, y);
+						if(processador4.getPixel(x, y) > fMax) {
+							fMax = processador4.getPixel(x, y);
+						}
+					}else if(processador3.getPixel(x, y) < fMin) {
+						fMin = processador3.getPixel(x, y);
+						if(processador4.getPixel(x, y) < fMin) {
+							fMin = processador4.getPixel(x, y);
+						}
+					}
+				}
+			}
+			
+			int resultadoG = 0;
+						
+			for(int x = 0; x < processador3.getWidth(); x++) {
+				for(int y = 0; y < processador3.getHeight(); y++) {
+					resultadoG = (255 / (fMax - fMin)) * (vetorF[x][y] - fMin);
+					processadorSoma.putPixel(x, y, resultadoG);
+				}
+			}
+			imagemSomada.show();
 			
 		}else if(opcaoSelecionada == "Wrapping") {
+			
+			int soma;
+			for(int x = 0; x < processador3.getWidth(); x++) {
+				for(int y = 0; y < processador3.getHeight(); y++) {
+					soma = processador3.getPixel(x, y) + processador4.getPixel(x, y);
+					if(soma > 255) {
+						soma = soma - 255;
+					}
+					processadorSoma.putPixel(x, y, soma);
+				}
+			}
+			imagemSomada.show();
 			
 		}
 	}
