@@ -32,6 +32,11 @@ public class Operacoes_Aritmeticas implements PlugIn, DialogListener{
 		interfaceGrafica.showDialog();
 		
 		
+		String vetorOperacoes[] = {"Add create", "Subtract create", "Multiply create", 
+				"Divide create", "AND create", "OR create", "XOR create", "Min create", 
+				"Max create", "Average create", "Difference create", "Copy create", "Transparent-zero create"};
+		
+		
 		if (interfaceGrafica.wasCanceled()) {
 			cancelar();
 			//IJ.showMessage("Binarização cancelada!");
@@ -39,11 +44,18 @@ public class Operacoes_Aritmeticas implements PlugIn, DialogListener{
 			if (interfaceGrafica.wasOKed()) {
 				String opcaoSelecionada = interfaceGrafica.getNextRadioButton();
 				if(opcaoSelecionada == "Imagem 1 e 2 - Células") {
-					realizarOperacoes(imp1, imp2);
+					for(int x = 0; x <= 12; x++) {
+						realizarOperacoes(imp1, imp2, vetorOperacoes[x]);
+					}
+					
 				}else if(opcaoSelecionada == "Imagem 3 e 4 - 8-bit") {
-					realizarOperacoes(imp3, imp4);
+					for(int x = 0; x <= 12; x++) {
+						realizarOperacoes(imp3, imp4, vetorOperacoes[x]);
+					}
 				}else if(opcaoSelecionada == "Imagem 5 e 6 - RGB") {
-					realizarOperacoes(imp5, imp6);
+					for(int x = 0; x <= 12; x++) {
+						realizarOperacoes(imp5, imp6, vetorOperacoes[x]);
+					}
 				}
 				
 				IJ.showMessage("Operações realizadas e imagens salvas!");
@@ -52,86 +64,11 @@ public class Operacoes_Aritmeticas implements PlugIn, DialogListener{
 	}
 	
 	
-	void realizarOperacoes(ImagePlus impRecebida1, ImagePlus impRecebida2){
-			//Soma Add
-			ImagePlus imagemSoma = ImageCalculator.run(impRecebida1, impRecebida2, "Add create");
-			imagemSoma.setTitle(impRecebida1.getTitle()+" Add "+impRecebida2.getTitle());
+	void realizarOperacoes(ImagePlus impRecebida1, ImagePlus impRecebida2, String operacao){
+			ImagePlus imagemSoma = ImageCalculator.run(impRecebida1, impRecebida2, operacao);
+			imagemSoma.setTitle(impRecebida1.getTitle()+" "+operacao+" "+impRecebida2.getTitle());
 			imagemSoma.show();
 			IJ.saveAs(imagemSoma, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemSoma.getTitle());
-			
-			//Subtração Subtract
-			ImagePlus imagemSubtracao = ImageCalculator.run(impRecebida1, impRecebida2, "Subtract create");
-			imagemSubtracao.setTitle(impRecebida1.getTitle()+" Subtract "+impRecebida2.getTitle());
-			imagemSubtracao.show();
-			IJ.saveAs(imagemSubtracao, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemSubtracao.getTitle());
-			
-			//Multiplicar Multiply
-			ImagePlus imagemMultiplicacao = ImageCalculator.run(impRecebida1, impRecebida2, "Multiply create");
-			imagemMultiplicacao.setTitle(impRecebida1.getTitle()+" Multiply "+impRecebida2.getTitle());
-			imagemMultiplicacao.show();
-			IJ.saveAs(imagemMultiplicacao, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemMultiplicacao.getTitle());
-			
-			//Dividir Divide
-			ImagePlus imagemDividir = ImageCalculator.run(impRecebida1, impRecebida2, "Divide create");
-			imagemDividir.setTitle(impRecebida1.getTitle()+" Divide "+impRecebida2.getTitle());
-			imagemDividir.show();
-			IJ.saveAs(imagemDividir, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemDividir.getTitle());
-			
-			//AND E
-			ImagePlus imagemAND = ImageCalculator.run(impRecebida1, impRecebida2, "AND create");
-			imagemAND.setTitle(impRecebida1.getTitle()+" AND "+impRecebida2.getTitle());
-			imagemAND.show();
-			IJ.saveAs(imagemAND, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemAND.getTitle());
-			
-			//OR OU
-			ImagePlus imagemOU = ImageCalculator.run(impRecebida1, impRecebida2, "OR create");
-			imagemOU.setTitle(impRecebida1.getTitle()+" OR "+impRecebida2.getTitle());
-			imagemOU.show();
-			IJ.saveAs(imagemOU, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemOU.getTitle());
-			
-			//XOR OU Exclusivo
-			ImagePlus imagemXOR = ImageCalculator.run(impRecebida1, impRecebida2, "XOR create");
-			imagemXOR.setTitle(impRecebida1.getTitle()+" XOR "+impRecebida2.getTitle());
-			imagemXOR.show();
-			IJ.saveAs(imagemXOR, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemXOR.getTitle());
-			
-			//Min Mínimo
-			ImagePlus imagemMin = ImageCalculator.run(impRecebida1, impRecebida2, "Min create");
-			imagemMin.setTitle(impRecebida1.getTitle()+" Min "+impRecebida2.getTitle());
-			imagemMin.show();
-			IJ.saveAs(imagemMin, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemMin.getTitle());
-			
-			//Max Máximo
-			ImagePlus imagemMax = ImageCalculator.run(impRecebida1, impRecebida2, "Max create");
-			imagemMax.setTitle(impRecebida1.getTitle()+" Max "+impRecebida2.getTitle());
-			imagemMax.show();
-			IJ.saveAs(imagemMax, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemMax.getTitle());
-			
-			//Average Média
-			ImagePlus imagemAverage = ImageCalculator.run(impRecebida1, impRecebida2, "Average create");
-			imagemAverage.setTitle(impRecebida1.getTitle()+" Average "+impRecebida2.getTitle());
-			imagemAverage.show();
-			IJ.saveAs(imagemAverage, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemAverage.getTitle());
-			
-			//Difference Diferença
-			ImagePlus imagemDifference = ImageCalculator.run(impRecebida1, impRecebida2, "Difference create");
-			imagemDifference.setTitle(impRecebida1.getTitle()+" Difference "+impRecebida2.getTitle());
-			imagemDifference.show();
-			IJ.saveAs(imagemDifference, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemDifference.getTitle());
-			
-			//Copy Copiar
-			ImagePlus imagemCopy = ImageCalculator.run(impRecebida1, impRecebida2, "Copy create");
-			imagemCopy.setTitle(impRecebida1.getTitle()+" Copy "+impRecebida2.getTitle());
-			imagemCopy.show();
-			IJ.saveAs(imagemCopy, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemCopy.getTitle());
-			
-			//Transparent-zero Transparente Zero
-			ImagePlus imagemTransparent = ImageCalculator.run(impRecebida1, impRecebida2, "Transparent-zero create");
-			imagemTransparent.setTitle(impRecebida1.getTitle()+" Transparent-zero "+impRecebida2.getTitle());
-			imagemTransparent.show();
-			IJ.saveAs(imagemTransparent, "PNG", "C:/Users/lukas/Desktop/BSI_TopicosAvancados1/TESTPlugin_/Imagens/Imagens Após Operações/"+imagemTransparent.getTitle());
-			
-
 	}
 	
 	private void cancelar() {

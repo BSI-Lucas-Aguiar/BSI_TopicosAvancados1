@@ -17,8 +17,7 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 	private ImagePlus imagemCinza;
 	private ImageProcessor processadorCinza;
 	
-	//Possui 256 posições para fazer a fórmula da equalização
-	private int vetorEqualizacao[] = new int[256];
+	
 	
 	//Os valores serão preenchidos na chamada da expansão
 	int valorMin = 0;
@@ -131,8 +130,10 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 		float totalElementosEqualizacao = 0;
 		
 		//Probabilidade de incidencia de um pixel
-		float vetorProbabilidade[] = new float[256];
+		float vetorProbabilidade[] = new float[255];
 		
+		//Possui 256 posições para fazer a fórmula da equalização
+		int vetorEqualizacao[] = new int[255];
 		
 		//Valores de intensidade possíveis
 		int pixelEqualizado[] = {0};
@@ -145,7 +146,7 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 			}
 		}
 
-		float probabilidadeCumulativa[] = new float[256];
+		float probabilidadeCumulativa[] = new float[255];
 		for (int x = 0; x < vetorEqualizacao.length; x++) {
 			//Probabilidade de ocorrencia, dividida pelo total de elementos contados anteriormente
 			//Valor da segunda coluna dividido pelo produto das dimensões da imagem já calculados
@@ -158,7 +159,7 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 			}
 		}
 		
-		//Multiplicação pensada para 20 tons como no slide
+		//Multiplicação pensada para 20 tons como no vídeo
 		for (int x = 0; x < processador.getWidth(); x++) {
 			for (int y = 0; y < processador.getHeight(); y++) {
 				pixelEqualizado = processadorCinza.getPixel(x, y, pixelEqualizado);
@@ -172,7 +173,7 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 	}
 
 	
-	//Resolvi chamar no WasOked, para realizar a operação somente uma vez
+	//Resolvi chamar no WasOked, para realizar a operação somente uma vez poderia ter removido visto que não está sendo utilizado
 	@Override
 	public boolean dialogItemChanged(GenericDialog interfaceGrafica, AWTEvent e) {
 		if (interfaceGrafica.wasCanceled())	return false;
