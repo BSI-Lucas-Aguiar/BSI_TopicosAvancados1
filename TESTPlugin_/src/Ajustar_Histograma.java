@@ -17,7 +17,8 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 	private ImagePlus imagemCinza;
 	private ImageProcessor processadorCinza;
 	
-	
+	//3 Processadores, um é o da imagem original RGB, outro o processador da imagem transforma do em escala de cinza
+	//O terceiro processador é onde serão feitas as alterações
 	
 	//Os valores serão preenchidos na chamada da expansão
 	int valorMin = 0;
@@ -125,50 +126,45 @@ public class Ajustar_Histograma implements PlugIn, DialogListener {
 	private void aplicarEqualizacao() {
 		//Define o processador cinza para a Imagem Cinza
 		imagemCinza.setProcessor(processadorCinza);
-		//Define um "backup" para processamento da imagem, visto que o processador cinza será editado
 		processadorDuplicado = processadorCinza.duplicate();
-		float totalElementosEqualizacao = 0;
 		
-		//Probabilidade de incidencia de um pixel
-		float vetorProbabilidade[] = new float[255];
+		int vetorIncidencia[] = new int[256];
 		
-		//Possui 256 posições para fazer a fórmula da equalização
-		int vetorEqualizacao[] = new int[255];
+		float vetorProbabilidade[] = new float[256];
 		
-		//Valores de intensidade possíveis
-		int pixelEqualizado[] = {0};
+		float totalMN = 0;
+		
+		float vetorProbabilidadeCumulativa[] = new float[256];
+		int pixelAtual;
 		for (int x = 0; x < processador.getWidth(); x++) {
 			for (int y = 0; y < processador.getHeight(); y++) {
-				pixelEqualizado = processadorCinza.getPixel(x, y, pixelEqualizado);
-				//Vetor declarado no início
-				vetorEqualizacao[pixelEqualizado[0]]++;
-				totalElementosEqualizacao++;
+				pixelAtual = processadorCinza.getPixel(x, y);
+				vetorIncidencia[pixelAtual]++;
+				totalMN++;
 			}
 		}
-
-		float probabilidadeCumulativa[] = new float[255];
-		for (int x = 0; x < vetorEqualizacao.length; x++) {
-			//Probabilidade de ocorrencia, dividida pelo total de elementos contados anteriormente
-			//Valor da segunda coluna dividido pelo produto das dimensões da imagem já calculados
-			vetorProbabilidade[x] = vetorEqualizacao[x]/totalElementosEqualizacao;
+		
+		for (int x = 0; x < vetorIncidencia.length; x++) {
+			vetorProbabilidade[x] = vetorIncidencia[x]/totalMN;
+		
 			if(x == 0) {
-				probabilidadeCumulativa[x] = vetorProbabilidade[x];
+				vetorProbabilidadeCumulativa[x] = vetorProbabilidade[x];
 			}
-			if(x > 0){
-				probabilidadeCumulativa[x] = probabilidadeCumulativa[x-1] + vetorProbabilidade[x];
+			if(x > 0) {
+				
+				vetorProbabilidadeCumulativa[x] = vetorProbabilidadeCumulativa[x-1] + vetorProbabilidade[x];
 			}
 		}
 		
-		//Multiplicação pensada para 20 tons como no vídeo
 		for (int x = 0; x < processador.getWidth(); x++) {
 			for (int y = 0; y < processador.getHeight(); y++) {
-				pixelEqualizado = processadorCinza.getPixel(x, y, pixelEqualizado);
-				int novaIntensidade = (int) (probabilidadeCumulativa[pixelEqualizado[0]] * 20);
-				processadorDuplicado.putPixel(x, y, novaIntensidade);
+				pixelAtual = processadorCinza.getPixel(x, y);
+				int valorArredondado = (int) (vetorProbabilidadeCumulativa[pixelAtual] * 255);
+				processadorCinza.putPixel(x, y, valorArredondado);
 			}
 		}
-		//Define o novo processador equalizado na imagem Cinza
-		imagemCinza.setProcessor(processadorDuplicado);
+		
+		//Define o novo processador equalizado como processador da imagem Cinza
 		imagemCinza.updateAndDraw();
 	}
 
