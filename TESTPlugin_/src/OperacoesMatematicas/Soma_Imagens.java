@@ -1,3 +1,4 @@
+package OperacoesMatematicas;
 import java.awt.AWTEvent;
 
 import ij.IJ;
