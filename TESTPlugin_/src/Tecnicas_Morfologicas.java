@@ -28,15 +28,15 @@ public class Tecnicas_Morfologicas implements PlugIn {
 				imagemEditada.show();
 				String opcaoSelecionada = interfaceGrafica.getNextRadioButton();
 				if(opcaoSelecionada == "Dilatação") {
-					dilatacao();
+					percorreImagem(opcaoSelecionada);
 				}else if(opcaoSelecionada == "Erosão") {
-					erosao();
+					percorreImagem(opcaoSelecionada);
 				}else if(opcaoSelecionada == "Fechamento") {
-					fechamento();
+					percorreImagem(opcaoSelecionada);
 				}else if(opcaoSelecionada == "Abertura") {
-					abertura();
+					percorreImagem(opcaoSelecionada);
 				}else if(opcaoSelecionada == "Borda") {
-					borda();
+					percorreImagem(opcaoSelecionada);
 				}
 			}
 		}
@@ -54,40 +54,70 @@ public class Tecnicas_Morfologicas implements PlugIn {
      	vetor[8] = processadorOriginal.getPixel(x, y);
 	}
 	
-	public void dilatacao() {
-		for (int x = 0; x< processadorOriginal.getWidth(); x++) {
-            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
-            	verificaPontos(x, y);
-            	if(vetor[8] == 0) {
-            		processadorEditado.putPixel(x-1,y+1, 0);
-            		processadorEditado.putPixel(x+1,y+1, 0);
-            		processadorEditado.putPixel(x, y+1, 0);
-            		processadorEditado.putPixel(x-1, y-1, 0);
-            		processadorEditado.putPixel(x+1,y-1, 0);
-            		processadorEditado.putPixel(x-1, y, 0);
-            		processadorEditado.putPixel(x+1, y, 0);
-            		processadorEditado.putPixel(x, y-1, 0);
-            		processadorEditado.putPixel(x, y, 0);
-            				
-            	}
-            }
+	public void percorreImagem(String opcao) {
+		if(opcao == "Dilatação") {
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaDilatacao(x, y);
+	            }
+			}
+		}else if(opcao == "Erosão") {
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaErosao(x, y);
+	            }
+			}
+		}else if(opcao == "Fechamento") {
+			
+		}else if(opcao == "Abertura") {
+			
+		}else if(opcao == "Borda") {
+			
 		}
-		imagemEditada.updateAndDraw();
 	}
 	
-	public void erosao() {
+
+	
+	public void realizaDilatacao(int x, int y) {
+		verificaPontos(x, y);
+    	if(vetor[8] == 0) {
+    		processadorEditado.putPixel(x-1,y+1, 0);
+    		processadorEditado.putPixel(x+1,y+1, 0);
+    		processadorEditado.putPixel(x, y+1, 0);
+    		processadorEditado.putPixel(x-1, y-1, 0);
+    		processadorEditado.putPixel(x+1,y-1, 0);
+    		processadorEditado.putPixel(x-1, y, 0);
+    		processadorEditado.putPixel(x+1, y, 0);
+    		processadorEditado.putPixel(x, y-1, 0);
+    		processadorEditado.putPixel(x, y, 0);    			
+    	}
+	}
+	
+	
+	public void realizaErosao(int x, int y) {
+		verificaPontos(x, y);
+		int element = 0;
+    	if(vetor[8] == 0) {
+    		for (int xImage = x - 1; xImage <= x + 1; xImage++) {
+				for (int yImage = y - 1; yImage <= y + 1; yImage++) {
+					if(processadorOriginal.getPixel(xImage, yImage) == 0) {
+						element++;
+					}
+				}
+			}
+			if (element == 9) processadorEditado.putPixel(x, y, 0);
+    	}
+	}
+	
+	public void realizaFechamento() {
 		
 	}
 	
-	public void fechamento() {
+	public void realizaAbertura() {
 		
 	}
 	
-	public void abertura() {
-		
-	}
-	
-	public void borda() {
+	public void realizaBorda() {
 		
 	}
 }
