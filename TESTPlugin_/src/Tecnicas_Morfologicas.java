@@ -98,9 +98,17 @@ public class Tecnicas_Morfologicas implements PlugIn {
 		}else if(opcao == "Borda") {
 			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
 	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaErosao(x, y);
 	            	
 	            }
 			}
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaBorda(x, y);
+	            	
+	            }
+			}
+			
 			imagemEditada.updateAndDraw();
 		}
 	}
@@ -139,15 +147,11 @@ public class Tecnicas_Morfologicas implements PlugIn {
 		}
 	}
 	
-	public void realizaFechamento() {
-		
-	}
 	
-	public void realizaAbertura() {
-		
-	}
-	
-	public void realizaBorda() {
-		
+	public void realizaBorda(int x, int y) {
+		int[] valor = imagemOriginal.getPixel(x, y);
+		if(valor[0] == 0) {
+			processadorEditado.putPixel(x, y, valor);
+		}
 	}
 }
