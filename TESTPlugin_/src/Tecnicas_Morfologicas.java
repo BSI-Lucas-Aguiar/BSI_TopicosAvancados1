@@ -61,18 +61,47 @@ public class Tecnicas_Morfologicas implements PlugIn {
 	            	realizaDilatacao(x, y);
 	            }
 			}
+			imagemEditada.updateAndDraw();
 		}else if(opcao == "Erosão") {
 			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
 	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
 	            	realizaErosao(x, y);
 	            }
 			}
+			imagemEditada.updateAndDraw();
 		}else if(opcao == "Fechamento") {
-			
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaDilatacao(x, y);
+	            	
+	            }
+			}
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaErosao(x, y);
+	            	
+	            }
+			}
+			imagemEditada.updateAndDraw();
 		}else if(opcao == "Abertura") {
-			
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaErosao(x, y);
+	            }
+			}
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	realizaDilatacao(x, y);
+	            }
+			}
+			imagemEditada.updateAndDraw();
 		}else if(opcao == "Borda") {
-			
+			for (int x = 0; x< processadorOriginal.getWidth(); x++) {
+	            for (int y = 0; y < processadorOriginal.getHeight(); y++) {
+	            	
+	            }
+			}
+			imagemEditada.updateAndDraw();
 		}
 	}
 	
@@ -96,17 +125,18 @@ public class Tecnicas_Morfologicas implements PlugIn {
 	
 	public void realizaErosao(int x, int y) {
 		verificaPontos(x, y);
-		int element = 0;
-    	if(vetor[8] == 0) {
-    		for (int xImage = x - 1; xImage <= x + 1; xImage++) {
-				for (int yImage = y - 1; yImage <= y + 1; yImage++) {
-					if(processadorOriginal.getPixel(xImage, yImage) == 0) {
-						element++;
-					}
-				}
+		boolean areaInteresse = true;
+		
+		//Caso a área de interesse não seja preta não irá realizar operação
+		for(int i = 0; i < vetor.length; i++) {
+			if(vetor[i] != 0) {
+				areaInteresse = false;
 			}
-			if (element == 9) processadorEditado.putPixel(x, y, 0);
-    	}
+		}
+		//Caso permaneça verdadeira é preenchido na imagem cópia
+		if(areaInteresse) {
+			processadorEditado.putPixel(x, y, 0);
+		}
 	}
 	
 	public void realizaFechamento() {
