@@ -18,7 +18,8 @@ public class Componentes_Conexos implements PlugIn{
 	Queue<Integer> filaX = new LinkedList<>();
 	Queue<Integer> filaY = new LinkedList<>();
 	
-	int escalaCinza = 80;
+	int escalaCinza = 40;
+	int contadorConexoes = 0;
 	
 	public void run(String arg) {
 		imagemOriginal.show();
@@ -27,7 +28,7 @@ public class Componentes_Conexos implements PlugIn{
 		for(int x = 0; x < imagemOriginal.getWidth(); x++) {
 			for(int y = 0; y < imagemOriginal.getHeight(); y++) {
 				processadorRotulado.putPixel(x, y, 0);
-				//230 para pegar possíveis erros da imagem criada
+				//230 para pegar possíveis erros da imagem criada (a imagem foi criada no paint)
 				if(processadorOriginal.getPixel(x, y) >= 230) {
 					processadorRotulado.putPixel(x, y, 255);
 				}
@@ -35,18 +36,17 @@ public class Componentes_Conexos implements PlugIn{
 		}
 		imagemRotulada.updateAndDraw();
 		
-		
-		
 		for(int x = 0; x < imagemOriginal.getWidth(); x++) {
 			for(int y = 0; y < imagemOriginal.getHeight(); y++) {
 				
 				if(processadorRotulado.getPixel(x, y) == 255) {
-					
+					contadorConexoes++;
 					
 					verificaConexao(x, y);
 					int tamanhoFila = filaX.size();
 					int valorX;
 					int valorY;
+					escalaCinza += 30;
 					for(int z = 0; z < tamanhoFila; z++) {
 						valorX = filaX.remove();
 						valorY = filaY.remove();
@@ -55,30 +55,30 @@ public class Componentes_Conexos implements PlugIn{
 				}
 			}
 		}
+		IJ.showMessage("Componentes Conectados Encontrados: "+contadorConexoes);
 		imagemRotulada.updateAndDraw();
 	}
 	
 	public void verificaConexao(int x, int y) {
 		filaX.add(x);
 		filaY.add(y);
+		//O pixel rotulado recebe o valor 254 para identificação
+		processadorRotulado.putPixel(x, y, 254);
 		
-		if(processadorOriginal.getPixel(x+1, y) == 255) {
+		if((processadorRotulado.getPixel(x+1, y) == 255) && (processadorRotulado.getPixel(x+1, y) != 254)) {
 			verificaConexao(x+1, y);
 		}
 		
-		if(processadorOriginal.getPixel(x, y+1) == 255) {
+		if((processadorRotulado.getPixel(x, y+1) == 255) && (processadorRotulado.getPixel(x, y+1) != 254)){
 			verificaConexao(x, y+1);
 		}
 		
-		if(processadorOriginal.getPixel(x-1, y) == 255) {
+		if((processadorRotulado.getPixel(x-1, y) == 255) && (processadorRotulado.getPixel(x-1, y) != 254)){
 			verificaConexao(x-1, y);
 		}
 		
-		if(processadorOriginal.getPixel(x, y-1) == 255) {
+		if((processadorRotulado.getPixel(x, y-1) == 255) && (processadorRotulado.getPixel(x, y-1) != 254)){
 			verificaConexao(x, y-1);
 		}
 	}
-	
-	
-	
 }
